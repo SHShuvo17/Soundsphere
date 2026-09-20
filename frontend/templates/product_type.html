@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product_type.name }} — SoundSphere{% endblock %}
+{% block meta_description %}{{ product_type.description|default:"Explore top rated models in this audio product type." }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:4rem;">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="{% url 'catalog:shop' %}">Shop</a>
+    <span class="breadcrumb-separator">/</span>
+    {% if category %}
+    <a href="{% url 'catalog:category' category.slug %}">{{ category.name }}</a>
+    <span class="breadcrumb-separator">/</span>
+    {% endif %}
+    <span class="breadcrumb-current">{{ product_type.name }}</span>
+  </nav>
+
+  <div class="section-header" style="margin-bottom:2.5rem;">
+    <div>
+      <span class="section-badge">Product Type</span>
+      <h1 class="section-title">{{ product_type.name }}</h1>
+      {% if product_type.description %}
+      <p class="section-subtitle">{{ product_type.description }}</p>
+      {% endif %}
+    </div>
+    <div class="results-info"><strong>{{ total_count }}</strong> items found</div>
+  </div>
+
+  <!-- Products Grid -->
+  {% if products %}
+  <div class="products-grid">
+    {% for product in products %}
+      {% include "partials/product_card.html" with product=product %}
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+  <nav class="pagination" aria-label="Product type pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">&laquo; Prev</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+      <span class="page-btn active">{{ num }}</span>
+      {% else %}
+      <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="page-btn">Next &raquo;</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🎧</div>
+    <h3 class="empty-state-title">No Products Found</h3>
+    <p class="empty-state-text">There are currently no products under this specific type.</p>
+    <a href="{% url 'catalog:shop' %}" class="btn btn-primary">Browse All Products</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

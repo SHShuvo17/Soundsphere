@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 50" width="100%" height="100%">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#9d4edd"/>
+    </linearGradient>
+  </defs>
+  <!-- Soundwave Sphere Icon -->
+  <circle cx="25" cy="25" r="20" fill="url(#logoGrad)"/>
+  <circle cx="25" cy="25" r="14" fill="#0d1117"/>
+  <g fill="url(#logoGrad)">
+    <rect x="17" y="21" width="3" height="8" rx="1.5"/>
+    <rect x="22" y="16" width="3" height="18" rx="1.5"/>
+    <rect x="27" y="12" width="3" height="26" rx="1.5"/>
+    <rect x="32" y="19" width="3" height="12" rx="1.5"/>
+  </g>
+  <!-- Text Brand -->
+  <text x="56" y="32" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-size="22" font-weight="800" fill="#f0f6fc" letter-spacing="-0.5">SOUND<tspan fill="url(#logoGrad)">SPHERE</tspan></text>
+</svg>

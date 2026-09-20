@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Saved Wishlist — SoundSphere{% endblock %}
+{% block meta_description %}Manage and view your saved audio products, headphones, and speaker systems.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:5rem;">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-current">My Wishlist</span>
+  </nav>
+
+  <div class="section-header" style="margin-bottom:2rem;">
+    <div>
+      <span class="section-badge">Saved Collection</span>
+      <h1 class="section-title">My Wishlist</h1>
+    </div>
+  </div>
+
+  {% if items or wishlist_items %}
+  <div class="products-grid">
+    {% for item in items|default:wishlist_items %}
+    <div class="product-card" id="wishlist-item-{{ item.product.id }}">
+      <div class="product-card-image-wrap">
+        <a href="{% url 'catalog:product_detail' item.product.slug %}">
+          {% if item.product.primary_image %}
+          <img src="{{ item.product.primary_image.url }}" alt="{{ item.product.name }}" class="product-card-img">
+          {% else %}
+          <img src="{% static 'images/placeholder-speaker.svg' %}" alt="{{ item.product.name }}" class="product-card-img">
+          {% endif %}
+        </a>
+        <button class="product-wishlist-btn active" onclick="removeFromWishlist('{{ item.product.id }}')" title="Remove from Wishlist">✕</button>
+      </div>
+
+      <div class="product-card-body">
+        {% if item.product.brand %}
+        <span class="product-card-brand">{{ item.product.brand.name }}</span>
+        {% endif %}
+        <h3 class="product-card-title">
+          <a href="{% url 'catalog:product_detail' item.product.slug %}">{{ item.product.name }}</a>
+        </h3>
+
+        <div class="product-card-footer" style="margin-top:1rem;">
+          <div class="product-pricing">
+            <span class="price-current">${{ item.product.effective_price }}</span>
+          </div>
+
+          <button class="btn btn-primary btn-sm add-to-cart-btn" data-product-id="{{ item.product.id }}" {% if item.product.stock_quantity == 0 %}disabled{% endif %}>
+            {% if item.product.stock_quantity == 0 %}Sold Out{% else %}Add to Cart{% endif %}
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">♡</div>
+    <h2 class="empty-state-title">Your wishlist is empty</h2>
+    <p class="empty-state-text">Explore our collection of premium speakers and save your favorite gear for later.</p>
+    <a href="{% url 'catalog:shop' %}" class="btn btn-primary btn-lg">Browse Audio Gear</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function removeFromWishlist(productId) {
+  const res = await SoundSphere.fetchAPI('/api/wishlist/remove/', {
+    method: 'DELETE',
+    body: JSON.stringify({ product_id: productId })
+  });
+
+  if (res.ok) {
+    SoundSphere.toast('Item removed from wishlist.', 'info');
+    setTimeout(() => window.location.reload(), 400);
+  } else {
+    SoundSphere.toast(res.data.error || 'Could not remove item.', 'error');
+  }
+}
+</script>
+{% endblock %}

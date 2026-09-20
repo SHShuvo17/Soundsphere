@@ -1,0 +1,521 @@
+/* ============================================================
+   SOUNDSPHERE — components.css
+   Buttons, product cards, product badges, toasts, modals
+   ============================================================ */
+
+/* ===================== BUTTONS ===================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--ease-base);
+  white-space: nowrap;
+  padding: 0.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn:disabled,
+.btn[disabled],
+.btn.loading {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Ripple effect */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  transform: scale(0);
+  transition: transform 0.4s ease;
+  border-radius: inherit;
+}
+
+.btn:active::after {
+  transform: scale(2);
+  transition: 0s;
+}
+
+/* Solid Accent */
+.btn-primary {
+  background: linear-gradient(135deg, #6C63FF 0%, #5A52F0 100%);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(108, 99, 255, 0.35);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #7B74FF 0%, #6C63FF 100%);
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.5);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary */
+.btn-secondary {
+  background: var(--background-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--card-bg-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+/* Outline */
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+}
+
+.btn-outline:hover {
+  background: var(--accent-light);
+  transform: translateY(-1px);
+}
+
+/* Ghost */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--background-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+/* Danger */
+.btn-danger {
+  background: var(--error-bg);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.btn-danger:hover {
+  background: var(--error);
+  color: #fff;
+}
+
+/* Sizes */
+.btn-sm {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 0.95rem 2rem;
+  font-size: 1rem;
+  border-radius: var(--radius-lg);
+}
+
+.btn-xl {
+  padding: 1.1rem 2.4rem;
+  font-size: 1.05rem;
+  border-radius: var(--radius-lg);
+}
+
+.btn-icon {
+  padding: 0.6rem;
+  border-radius: var(--radius-md);
+  aspect-ratio: 1;
+}
+
+/* ===================== PRODUCT CARD ===================== */
+.product-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: transform var(--ease-base), box-shadow var(--ease-base), border-color var(--ease-base);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(108, 99, 255, 0.3);
+}
+
+/* Image wrap */
+.product-card-image-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--card-image-bg);
+  overflow: hidden;
+}
+
+.product-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover .product-card-img {
+  transform: scale(1.06);
+}
+
+/* Badge group */
+.product-badge-group {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 2;
+}
+
+.product-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25em 0.65em;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge-discount {
+  background: var(--error);
+  color: #fff;
+}
+
+.badge-bestseller {
+  background: var(--warning);
+  color: #0A0D14;
+}
+
+.badge-new {
+  background: var(--success);
+  color: #fff;
+}
+
+.badge-featured {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Quick actions */
+.product-card-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 2;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: all var(--ease-base);
+}
+
+.product-card:hover .product-card-actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.product-wishlist-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(10, 13, 20, 0.8);
+  backdrop-filter: blur(8px);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--ease-fast);
+  font-size: 1rem;
+}
+
+.product-wishlist-btn:hover,
+.product-wishlist-btn.active {
+  background: var(--error-bg);
+  border-color: var(--error);
+  color: var(--error);
+  transform: scale(1.1);
+}
+
+/* Card body */
+.product-card-body {
+  padding: 1.1rem 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.product-brand-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.product-title {
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  font-family: var(--font-heading);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Star ratings */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stars {
+  display: flex;
+  gap: 1px;
+  color: var(--warning);
+  font-size: 0.72rem;
+}
+
+.rating-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Price area */
+.product-pricing {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.price-current {
+  font-size: 1.2rem;
+  font-weight: 900;
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.price-original {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* Card footer */
+.product-card-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.btn-add-cart {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--ease-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-add-cart:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow-accent);
+}
+
+/* Stock status inline */
+.stock-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2em 0.6em;
+  border-radius: var(--radius-full);
+}
+
+.stock-in {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.stock-low {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.stock-out {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+/* ===================== PRODUCT GRID ===================== */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+/* ===================== TOAST NOTIFICATIONS ===================== */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 380px;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-xl);
+  animation: slideInRight 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 300px;
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+}
+
+.toast.success::before {
+  background: var(--success);
+}
+
+.toast.error::before {
+  background: var(--error);
+}
+
+.toast.warning::before {
+  background: var(--warning);
+}
+
+.toast.info::before {
+  background: var(--info);
+}
+
+.toast-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+.toast-body {
+  flex: 1;
+}
+
+.toast-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.toast-msg {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color var(--ease-fast);
+}
+
+.toast-close:hover {
+  color: var(--text-primary);
+}
+
+.toast-fade-out {
+  animation: slideOutRight 0.3s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}

@@ -1,0 +1,138 @@
+/* ============================================================
+   SOUNDSPHERE — variables.css
+   Design tokens, color palettes, spacing, shadows, transitions
+   ============================================================ */
+
+/* ---------- GOOGLE FONTS ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  /* ===================== COLOR SYSTEM ===================== */
+
+  /* Brand Accent — Electric Indigo */
+  --accent:        #31B79F;
+  --accent-hover:  #27A58F;
+  --accent-active: #208A78;
+  --accent-light:  rgba(49, 183, 159, 0.13);
+  --accent-glow:   rgba(49, 183, 159, 0.28);
+
+  /* Backgrounds */
+  --background:           #101315;
+  --background-secondary: #171B1D;
+  --background-tertiary:  #202729;
+  --card-bg:              #1A2021;
+  --card-bg-hover:        #232B2C;
+  --card-image-bg:        #111718;
+  --nav-bg:               rgba(16, 19, 21, 0.92);
+  --overlay:              rgba(0, 0, 0, 0.6);
+
+  /* Text */
+  --text-primary:   #F2F4F1;
+  --text-secondary: #B6C2BF;
+  --text-muted:     #7D8C88;
+  --text-disabled:  #4A5754;
+
+  /* Borders */
+  --border:         rgba(255, 255, 255, 0.08);
+  --border-hover:   rgba(255, 255, 255, 0.18);
+  --border-focus:   rgba(108, 99, 255, 0.55);
+
+  /* Semantic colors */
+  --success:     #22C55E;
+  --success-bg:  rgba(34, 197, 94, 0.12);
+  --warning:     #F59E0B;
+  --warning-bg:  rgba(245, 158, 11, 0.12);
+  --error:       #EF4444;
+  --error-bg:    rgba(239, 68, 68, 0.12);
+  --info:        #38BDF8;
+  --info-bg:     rgba(56, 189, 248, 0.12);
+
+  /* ===================== TYPOGRAPHY ===================== */
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Plus Jakarta Sans', system-ui, sans-serif;
+
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+  --text-4xl:  2.25rem;    /* 36px */
+  --text-5xl:  3rem;       /* 48px */
+  --text-6xl:  3.75rem;    /* 60px */
+
+  /* ===================== SPACING ===================== */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ===================== BORDER RADIUS ===================== */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* ===================== SHADOWS ===================== */
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.4);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.45);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.55);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.65);
+  --shadow-xl:  0 16px 64px rgba(0,0,0,0.7);
+  --shadow-accent: 0 4px 24px rgba(108, 99, 255, 0.4);
+  --shadow-card: 0 2px 16px rgba(0,0,0,0.5);
+
+  /* ===================== TRANSITIONS ===================== */
+  --ease-fast:    0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-base:    0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-slow:    0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ===================== LAYOUT ===================== */
+  --container-max: 1360px;
+  --nav-height:    72px;
+  --announce-h:    40px;
+  --sidebar-w:     260px;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+}
+
+/* Clean daylight palette selected by the theme toggle. */
+[data-theme="light"] {
+  --background:           #F5F8F7;
+  --background-secondary: #EAF1EF;
+  --background-tertiary:  #DDE9E5;
+  --card-bg:              #FFFFFF;
+  --card-bg-hover:        #F0F7F5;
+  --card-image-bg:        #EEF5F3;
+  --nav-bg:               rgba(255, 255, 255, 0.94);
+  --overlay:              rgba(15, 32, 28, 0.42);
+  --text-primary:         #172320;
+  --text-secondary:       #40534E;
+  --text-muted:           #6A7C76;
+  --text-disabled:        #A5B5B0;
+  --border:               rgba(23, 55, 47, 0.13);
+  --border-hover:         rgba(23, 55, 47, 0.24);
+  --border-focus:         rgba(32, 138, 120, 0.55);
+  --shadow-xs:            0 1px 3px rgba(22, 54, 46, 0.08);
+  --shadow-sm:            0 2px 8px rgba(22, 54, 46, 0.10);
+  --shadow-md:            0 4px 20px rgba(22, 54, 46, 0.12);
+  --shadow-lg:            0 8px 40px rgba(22, 54, 46, 0.15);
+  --shadow-xl:            0 16px 64px rgba(22, 54, 46, 0.18);
+  --shadow-card:          0 2px 16px rgba(22, 54, 46, 0.10);
+}

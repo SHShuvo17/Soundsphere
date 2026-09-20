@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Shop All Audio Gear — SoundSphere{% endblock %}
+{% block meta_description %}Explore SoundSphere's catalog of premium speakers, home theaters, studio monitors, soundbars, and karaoke audio.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2rem; padding-bottom:4rem;">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-current">Shop All Products</span>
+  </nav>
+
+  <div class="shop-layout">
+    <!-- LEFT: FILTERS SIDEBAR (Section 24) -->
+    <aside class="shop-sidebar" id="shop-sidebar">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <h3 style="font-size:1.1rem; font-weight:800;">Filters</h3>
+        <a href="{% url 'catalog:shop' %}" style="font-size:0.8rem; color:var(--accent); text-decoration:underline;">Reset All</a>
+      </div>
+
+      <form method="GET" action="{% url 'catalog:shop' %}" id="shop-filter-form">
+        {% if search %}<input type="hidden" name="search" value="{{ search }}">{% endif %}
+        <input type="hidden" name="sort" id="hidden-sort-input" value="{{ sort|default:'newest' }}">
+
+        <!-- 1. Categories Filter -->
+        <div class="filter-group">
+          <h4 class="filter-title">Category</h4>
+          <div class="filter-options">
+            {% for cat in categories %}
+            <label class="filter-item">
+              <span class="form-check">
+                <input type="checkbox" name="category" value="{{ cat.slug }}" {% if cat.slug in selected_categories %}checked{% endif %} class="auto-filter-check">
+                <span>{{ cat.name }}</span>
+              </span>
+              <span class="filter-count">({{ cat.prod_count }})</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 2. Brands Filter -->
+        <div class="filter-group">
+          <h4 class="filter-title">Brand</h4>
+          <div class="filter-options">
+            {% for b in brands %}
+            <label class="filter-item">
+              <span class="form-check">
+                <input type="checkbox" name="brand" value="{{ b.slug }}" {% if b.slug in selected_brands %}checked{% endif %} class="auto-filter-check">
+                <span>{{ b.name }}</span>
+              </span>
+              <span class="filter-count">({{ b.prod_count }})</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 3. Price Filter -->
+        <div class="filter-group">
+          <h4 class="filter-title">Max Price</h4>
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
+            <span style="font-size:0.85rem; color:var(--text-muted);">$0</span>
+            <input type="range" name="max_price" id="price-range-slider" min="50" max="3000" step="25" value="{{ max_price|default:'2000' }}" style="flex:1; accent-color:var(--accent);">
+            <span id="price-max-display" style="font-size:0.88rem; font-weight:700; color:var(--accent); min-width:55px; text-align:right;">${{ max_price|default:'2000' }}</span>
+          </div>
+        </div>
+
+        <!-- 4. Availability -->
+        <div class="filter-group">
+          <h4 class="filter-title">Availability</h4>
+          <label class="filter-item">
+            <span class="form-check">
+              <input type="checkbox" name="in_stock" value="true" {% if in_stock %}checked{% endif %} class="auto-filter-check">
+              <span>In Stock Only</span>
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm w-full" style="margin-top:0.5rem;">Apply Filters</button>
+      </form>
+    </aside>
+
+    <!-- RIGHT: PRODUCT CATALOG AREA (Section 23) -->
+    <main class="shop-main">
+      <!-- Toolbar -->
+      <div class="shop-toolbar">
+        <div class="results-info">
+          {% if search %}
+            Search results for "<strong>{{ search }}</strong>" &bull;
+          {% endif %}
+          Showing <strong>{{ total_count }}</strong> audio products
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <label for="shop-sort-select" style="font-size:0.85rem; color:var(--text-muted);">Sort By:</label>
+          <select id="shop-sort-select" class="form-select" style="padding:0.45rem 0.85rem; font-size:0.85rem; width:auto;">
+            <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest Arrivals</option>
+            <option value="popular" {% if sort == 'popular' %}selected{% endif %}>Best Selling</option>
+            <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="rating" {% if sort == 'rating' %}selected{% endif %}>Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      {% if products %}
+      <div class="products-grid">
+        {% for product in products %}
+          {% include "partials/product_card.html" with product=product %}
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if page_obj.has_other_pages %}
+      <nav class="pagination" aria-label="Catalog pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-btn">&laquo; Prev</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <span class="page-btn active">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-btn">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-btn">Next &raquo;</a>
+        {% endif %}
+      </nav>
+      {% endif %}
+
+      {% else %}
+      <!-- Empty State (Section 40) -->
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <h3 class="empty-state-title">No Audio Gear Found</h3>
+        <p class="empty-state-text">
+          We couldn't find any products matching your current search or filter combination.
+        </p>
+        <a href="{% url 'catalog:shop' %}" class="btn btn-primary">Browse All Audio Gear</a>
+      </div>
+      {% endif %}
+    </main>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/products.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SoundSphere — Premium Audio & Speakers{% endblock %}
+{% block meta_description %}SoundSphere: Premium Sound. Simple Shopping. Explore high-performance Bluetooth speakers, soundbars, home theaters, and studio audio.{% endblock %}
+
+{% block content %}
+<!-- 1. HOMEPAGE HERO SECTION (Section 10 & 11) -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-grid">
+      <!-- Left Content -->
+      <div class="hero-content">
+        <span class="hero-label">🔊 Premium Audio Experience</span>
+        <h1 class="hero-title">Power Your Sound.</h1>
+        <p class="hero-subtitle">
+          Discover powerful speakers engineered for music, cinema, gaming, and unforgettable acoustic moments.
+        </p>
+        <div class="hero-actions">
+          <a href="{% url 'catalog:shop' %}" class="btn btn-primary btn-lg">Shop Now</a>
+          <a href="#categories-section" class="btn btn-secondary btn-lg">Explore Categories</a>
+        </div>
+      </div>
+
+      <!-- Right Visual -->
+      <div class="hero-visual">
+        <div class="hero-img-backdrop"></div>
+        <img src="{% static 'images/hero-speaker.jpg' %}" alt="SoundSphere Flagship Audio Speaker" class="hero-speaker-img" width="460" height="460" style="border-radius:var(--radius-xl);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. CATEGORY SECTION (Section 12 - 8 Category Cards) -->
+<section class="section" id="categories-section">
+  <div class="container">
+    <div class="section-header text-center" style="justify-content:center; flex-direction:column; align-items:center;">
+      <span class="section-badge">Browse Categories</span>
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Find the right acoustic system tailored to your space</p>
+    </div>
+
+    <div class="categories-grid">
+      <!-- 1. Bluetooth Speakers -->
+      <a href="{% url 'catalog:shop' %}?category=bluetooth-speakers" class="category-card">
+        <div class="category-card-icon">📻</div>
+        <h3 class="category-card-name">Bluetooth Speakers</h3>
+        <p class="category-card-desc">Portable sound for every journey & outdoor adventure</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 2. Soundbars -->
+      <a href="{% url 'catalog:shop' %}?category=soundbars" class="category-card">
+        <div class="category-card-icon">🔊</div>
+        <h3 class="category-card-name">Soundbars</h3>
+        <p class="category-card-desc">Immersive cinema audio with crystal-clear dialogue</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 3. Multimedia Speakers -->
+      <a href="{% url 'catalog:shop' %}?category=multimedia-speakers" class="category-card">
+        <div class="category-card-icon">💻</div>
+        <h3 class="category-card-name">Multimedia Speakers</h3>
+        <p class="category-card-desc">Rich desktop audio for workstations & bedrooms</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 4. Home Theater -->
+      <a href="{% url 'catalog:shop' %}?category=home-theater" class="category-card">
+        <div class="category-card-icon">🎬</div>
+        <h3 class="category-card-name">Home Theater</h3>
+        <p class="category-card-desc">Surround sound systems for true movie theater vibes</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 5. Bookshelf & Hi-Fi -->
+      <a href="{% url 'catalog:shop' %}?category=bookshelf-hi-fi" class="category-card">
+        <div class="category-card-icon">📚</div>
+        <h3 class="category-card-name">Bookshelf & Hi-Fi</h3>
+        <p class="category-card-desc">High-fidelity acoustic precision for music lovers</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 6. Gaming & Computer Audio -->
+      <a href="{% url 'catalog:shop' %}?category=gaming-computer-audio" class="category-card">
+        <div class="category-card-icon">🎮</div>
+        <h3 class="category-card-name">Gaming & Computer</h3>
+        <p class="category-card-desc">Positional 3D audio cues & deep RGB subwoofers</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 7. Professional Audio -->
+      <a href="{% url 'catalog:shop' %}?category=professional-audio" class="category-card">
+        <div class="category-card-icon">🎙️</div>
+        <h3 class="category-card-name">Professional Audio</h3>
+        <p class="category-card-desc">Studio monitors, stage PA systems & mixer gear</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+
+      <!-- 8. Karaoke -->
+      <a href="{% url 'catalog:shop' %}?category=karaoke-party" class="category-card">
+        <div class="category-card-icon">🎤</div>
+        <h3 class="category-card-name">Karaoke & Party</h3>
+        <p class="category-card-desc">Wireless vocal mics & high-wattage party speakers</p>
+        <span class="category-card-arrow">Explore →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PRODUCT TYPE DISCOVERY (Section 13) -->
+<section class="section" style="background:var(--background-secondary); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header text-center" style="justify-content:center; flex-direction:column; align-items:center;">
+      <span class="section-badge">Fast Search</span>
+      <h2 class="section-title">Find the Perfect Speaker</h2>
+      <p class="section-subtitle">Quickly discover gear by your favorite listening style</p>
+    </div>
+
+    <div class="type-pills-wrap">
+      <a href="{% url 'catalog:shop' %}?search=Portable+Bluetooth" class="type-pill">⚡ Portable Bluetooth</a>
+      <a href="{% url 'catalog:shop' %}?search=Party+Speaker" class="type-pill">🎉 Party Speaker</a>
+      <a href="{% url 'catalog:shop' %}?search=Soundbar" class="type-pill">📺 Dolby Atmos Soundbar</a>
+      <a href="{% url 'catalog:shop' %}?search=Gaming+Speaker" class="type-pill">🎮 RGB Gaming Audio</a>
+      <a href="{% url 'catalog:shop' %}?search=Studio+Monitor" class="type-pill">🎛️ Studio Monitor</a>
+      <a href="{% url 'catalog:shop' %}?search=Subwoofer" class="type-pill">💥 Deep Bass Subwoofer</a>
+      <a href="{% url 'catalog:shop' %}?search=Wireless+Karaoke" class="type-pill">🎤 Wireless Karaoke</a>
+      <a href="{% url 'catalog:shop' %}" class="type-pill" style="border-color:var(--accent); color:var(--accent)">View All Audio →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 4. FEATURED PICKS (Section 14) -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-badge">Curated Collection</span>
+        <h2 class="section-title">Featured Picks</h2>
+        <p class="section-subtitle">Handpicked audio products worth listening to</p>
+      </div>
+      <a href="{% url 'catalog:shop' %}" class="btn btn-outline btn-sm">View All Products →</a>
+    </div>
+
+    <div class="products-grid">
+      {% for product in featured_products %}
+        {% include "partials/product_card.html" with product=product %}
+      {% empty %}
+        {% for product in best_sellers|slice:":4" %}
+          {% include "partials/product_card.html" with product=product %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 5. BEST SELLERS (Section 16) -->
+<section class="section" style="background:var(--background-secondary); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-badge">Most Popular</span>
+        <h2 class="section-title">Best Sellers</h2>
+        <p class="section-subtitle">Top-rated acoustic systems loved by audiophiles worldwide</p>
+      </div>
+      <a href="{% url 'catalog:shop' %}?sort=popular" class="btn btn-secondary btn-sm">Browse Top Ranked →</a>
+    </div>
+
+    <div class="products-grid">
+      {% for product in best_sellers %}
+        {% include "partials/product_card.html" with product=product %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 6. SPECIAL OFFER / PROMO BANNER (Section 17) -->
+<section class="section">
+  <div class="container">
+    <div class="promo-banner">
+      <div>
+        <span class="promo-badge">Limited Time Offer</span>
+        <h2 class="promo-title">Upgrade Your Sound.</h2>
+        <p class="promo-subtitle">
+          Save up to 30% on selected studio monitors, party speakers, and high-res soundbars.
+        </p>
+        <a href="{% url 'catalog:shop' %}?filter=best_seller" class="btn btn-primary btn-lg">Explore Offers</a>
+      </div>
+      <div style="font-size:5.5rem; color:var(--accent); opacity:0.85; flex-shrink:0;">
+        🔊
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. WHY SOUNDSPHERE (Section 18 - 4 Benefits) -->
+<section class="section" style="background:var(--background-secondary); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header text-center" style="justify-content:center; flex-direction:column; align-items:center;">
+      <span class="section-badge">The SoundSphere Promise</span>
+      <h2 class="section-title">Why Shop With Us</h2>
+      <p class="section-subtitle">Premium sound backed by world-class customer guarantees</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🛡️</div>
+        <h3 class="why-title">Authentic Products</h3>
+        <p class="why-desc">100% verified genuine brand audio gear with manufacturer warranty.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🔒</div>
+        <h3 class="why-title">Secure Payment</h3>
+        <p class="why-desc">256-bit encrypted checkout keeping your credentials protected.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🚀</div>
+        <h3 class="why-title">Fast Delivery</h3>
+        <p class="why-desc">Carefully packaged and insured courier delivery to your doorstep.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🔄</div>
+        <h3 class="why-title">Easy Returns</h3>
+        <p class="why-desc">Simple, transparent 30-day return policy if not completely satisfied.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. CUSTOMER REVIEWS (Section 19) -->
+<section class="section">
+  <div class="container">
+    <div class="section-header text-center" style="justify-content:center; flex-direction:column; align-items:center;">
+      <span class="section-badge">Testimonials</span>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-subtitle">Real experiences from our growing community of music enthusiasts</p>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The sound clarity on the soundbar I purchased is astounding. It completely transformed my living room cinema experience."</p>
+        <div class="review-author">
+          <span class="author-name">Alex Rivera</span>
+          <span class="verified-badge">✓ Verified Purchase</span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"SoundSphere had the exact studio monitors in stock that other places were sold out of. Delivery was fast and in pristine condition."</p>
+        <div class="review-author">
+          <span class="author-name">Marcus Vance</span>
+          <span class="verified-badge">✓ Verified Purchase</span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Outstanding build quality on the portable speaker. Crisp highs, punchy sub-bass, and battery lasts all weekend long."</p>
+        <div class="review-author">
+          <span class="author-name">Sarah Chen</span>
+          <span class="verified-badge">✓ Verified Purchase</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. SHOP BY BRAND (Section 20) -->
+<section class="section" style="background:var(--background-secondary); border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header text-center" style="justify-content:center; flex-direction:column; align-items:center;">
+      <span class="section-badge">Trusted Brands</span>
+      <h2 class="section-title">Shop by Brand</h2>
+      <p class="section-subtitle">Official authorized dealer for world-leading acoustic innovators</p>
+    </div>
+
+    <div class="brands-grid">
+      <a href="{% url 'catalog:shop' %}?brand=jbl" class="brand-card">JBL</a>
+      <a href="{% url 'catalog:shop' %}?brand=sony" class="brand-card">Sony</a>
+      <a href="{% url 'catalog:shop' %}?brand=bose" class="brand-card">Bose</a>
+      <a href="{% url 'catalog:shop' %}?brand=anker" class="brand-card">Anker</a>
+      <a href="{% url 'catalog:shop' %}?brand=edifier" class="brand-card">Edifier</a>
+      <a href="{% url 'catalog:shop' %}?brand=logitech" class="brand-card">Logitech</a>
+      <a href="{% url 'catalog:shop' %}?brand=samsung" class="brand-card">Samsung</a>
+      <a href="{% url 'catalog:shop' %}?brand=lg" class="brand-card">LG</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

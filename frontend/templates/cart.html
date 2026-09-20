@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your Shopping Cart — SoundSphere{% endblock %}
+{% block meta_description %}Review your selected audio systems, apply coupon codes, and proceed to checkout.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:5rem;">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-current">Shopping Cart</span>
+  </nav>
+
+  <div class="section-header" style="margin-bottom:2rem;">
+    <div>
+      <span class="section-badge">Order Review</span>
+      <h1 class="section-title">Your Shopping Cart</h1>
+    </div>
+  </div>
+
+  {% if items or cart_items %}
+  <div class="cart-layout" id="cart-layout">
+    <!-- LEFT: CART ITEMS LIST -->
+    <div class="cart-items-list" id="cart-items-container">
+      {% for item in items|default:cart_items %}
+      <div class="cart-item-card" id="cart-item-{{ item.id }}">
+        <!-- Thumbnail -->
+        <a href="{% url 'catalog:product_detail' item.product.slug %}">
+          {% if item.product.primary_image %}
+          <img src="{{ item.product.primary_image.url }}" alt="{{ item.product.name }}" class="cart-item-thumb">
+          {% else %}
+          <img src="{% static 'images/placeholder-speaker.svg' %}" alt="{{ item.product.name }}" class="cart-item-thumb">
+          {% endif %}
+        </a>
+
+        <!-- Details -->
+        <div>
+          {% if item.product.brand %}
+          <div style="font-size:0.75rem; font-weight:700; color:var(--accent); text-transform:uppercase; margin-bottom:0.25rem;">{{ item.product.brand.name }}</div>
+          {% endif %}
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.4rem;">
+            <a href="{% url 'catalog:product_detail' item.product.slug %}">{{ item.product.name }}</a>
+          </h3>
+          <div style="font-size:0.85rem; color:var(--text-muted);">${{ item.product.effective_price }} each</div>
+
+          <!-- Quantity Controls -->
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-top:0.75rem;">
+            <div class="qty-stepper" style="height:32px;">
+              <button type="button" class="qty-btn" style="width:30px; height:30px;" onclick="updateCartQty('{{ item.id }}', {{ item.quantity|add:'-1' }})">-</button>
+              <span class="qty-input" style="width:36px; line-height:30px; font-size:0.9rem;">{{ item.quantity }}</span>
+              <button type="button" class="qty-btn" style="width:30px; height:30px;" onclick="updateCartQty('{{ item.id }}', {{ item.quantity|add:'1' }})">+</button>
+            </div>
+            <button type="button" onclick="removeCartItem('{{ item.id }}')" style="font-size:0.8rem; color:var(--error); text-decoration:underline;">Remove</button>
+          </div>
+        </div>
+
+        <!-- Subtotal -->
+        <div style="text-align:right;">
+          <div style="font-family:'Outfit',sans-serif; font-size:1.25rem; font-weight:800; color:var(--text-primary);">
+            ${{ item.total_price|default:item.subtotal }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <aside class="order-summary-card">
+      <h2 class="summary-title">Order Summary</h2>
+
+      <div class="summary-row">
+        <span>Items Subtotal</span>
+        <span id="summary-subtotal">${{ subtotal|default:cart.subtotal }}</span>
+      </div>
+
+      <div class="summary-row" id="discount-row" {% if not discount_amount %}style="display:none"{% endif %}>
+        <span>Coupon Discount</span>
+        <span id="summary-discount" style="color:var(--success)">-${{ discount_amount|default:"0.00" }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Estimated Delivery</span>
+        <span id="summary-shipping">{% if shipping_cost == 0 %}Free{% else %}${{ shipping_cost|default:"0.00" }}{% endif %}</span>
+      </div>
+
+      <div class="summary-row total">
+        <span>Total Amount</span>
+        <span id="summary-total">${{ total|default:cart.total }}</span>
+      </div>
+
+      <!-- Coupon Form -->
+      <div style="margin-bottom:1.5rem;">
+        <label for="coupon-code" class="form-label">Promotional Coupon</label>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="text" id="coupon-code" placeholder="e.g. WELCOME10" class="form-input" style="text-transform:uppercase;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="applyCoupon()">Apply</button>
+        </div>
+        <div id="coupon-feedback" style="font-size:0.8rem; margin-top:0.35rem; font-weight:600;"></div>
+      </div>
+
+      <!-- Primary CTA -->
+      <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg w-full" style="margin-bottom:0.75rem;">
+        Proceed to Checkout →
+      </a>
+
+      <!-- Secondary CTA -->
+      <a href="{% url 'catalog:shop' %}" class="btn btn-secondary w-full">
+        Continue Shopping
+      </a>
+    </aside>
+  </div>
+
+  {% else %}
+  <!-- Empty Cart State (Section 29 & 40) -->
+  <div class="empty-state">
+    <div class="empty-state-icon">🛒</div>
+    <h2 class="empty-state-title">Your cart is waiting for something awesome.</h2>
+    <p class="empty-state-text">Explore our collection of studio monitors, wireless speakers, and soundbars.</p>
+    <a href="{% url 'catalog:shop' %}" class="btn btn-primary btn-lg">Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function updateCartQty(itemId, newQty) {
+  if (newQty < 1) {
+    removeCartItem(itemId);
+    return;
+  }
+
+  const res = await SoundSphere.fetchAPI('/api/cart/update/', {
+    method: 'PATCH',
+    body: JSON.stringify({ item_id: itemId, quantity: newQty })
+  });
+
+  if (res.ok) {
+    window.location.reload();
+  } else {
+    SoundSphere.toast(res.data.error || 'Could not update quantity.', 'error');
+  }
+}
+
+async function removeCartItem(itemId) {
+  const res = await SoundSphere.fetchAPI('/api/cart/remove/', {
+    method: 'DELETE',
+    body: JSON.stringify({ item_id: itemId })
+  });
+
+  if (res.ok) {
+    SoundSphere.toast('Item removed from cart.', 'info');
+    setTimeout(() => window.location.reload(), 400);
+  } else {
+    SoundSphere.toast(res.data.error || 'Could not remove item.', 'error');
+  }
+}
+
+async function applyCoupon() {
+  const code = document.getElementById('coupon-code').value.trim();
+  const feedback = document.getElementById('coupon-feedback');
+  if (!code) return;
+
+  const res = await SoundSphere.fetchAPI('/api/coupons/validate/', {
+    method: 'POST',
+    body: JSON.stringify({ code: code })
+  });
+
+  if (res.ok) {
+    feedback.style.color = 'var(--success)';
+    feedback.textContent = res.data.message || 'Coupon applied successfully!';
+    SoundSphere.toast('Coupon applied!', 'success');
+    setTimeout(() => window.location.reload(), 800);
+  } else {
+    feedback.style.color = 'var(--error)';
+    feedback.textContent = res.data.error || res.data.message || 'Invalid coupon code.';
+  }
+}
+</script>
+{% endblock %}

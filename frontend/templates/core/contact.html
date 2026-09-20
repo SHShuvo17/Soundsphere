@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Audio Advisory — SoundSphere{% endblock %}
+{% block meta_description %}Get in touch with SoundSphere customer support and acoustic specialists.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:3rem; padding-bottom:5rem; max-width:840px;">
+  <div class="text-center" style="margin-bottom:3rem;">
+    <span class="section-badge">Get in Touch</span>
+    <h1 style="font-size:2.4rem; font-weight:900; margin-bottom:0.5rem;">We're Here to Help</h1>
+    <p style="color:var(--text-secondary); font-size:1rem;">Have questions regarding an audio system or need order assistance? Reach out anytime.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1.3fr 0.9fr; gap:2.5rem; align-items:start;">
+    <!-- Contact Form -->
+    <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:2rem;">
+      <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1.25rem;">Send an Inquiry</h3>
+
+      <form method="POST" action="{% url 'core:contact' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" name="name" class="form-input" placeholder="Full Name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-input" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input type="text" name="subject" class="form-input" placeholder="Product question or order inquiry" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea name="message" rows="4" class="form-textarea" placeholder="How can our sound engineers help you today?" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-full">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Contact Info Cards -->
+    <div style="display:flex; flex-direction:column; gap:1.25rem;">
+      <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:1.5rem;">
+        <div style="font-size:1.5rem; color:var(--accent); margin-bottom:0.5rem;">📍</div>
+        <h4 style="font-weight:700; font-size:1rem; margin-bottom:0.25rem;">SoundSphere Headquarters</h4>
+        <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">100 Acoustic Way, Suite 500<br>San Francisco, CA 94107, USA</p>
+      </div>
+
+      <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:1.5rem;">
+        <div style="font-size:1.5rem; color:var(--accent); margin-bottom:0.5rem;">✉️</div>
+        <h4 style="font-weight:700; font-size:1rem; margin-bottom:0.25rem;">Email Support</h4>
+        <p style="color:var(--text-muted); font-size:0.85rem;">advisory@soundsphere.com<br>support@soundsphere.com</p>
+      </div>
+
+      <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:1.5rem;">
+        <div style="font-size:1.5rem; color:var(--accent); margin-bottom:0.5rem;">📞</div>
+        <h4 style="font-weight:700; font-size:1rem; margin-bottom:0.25rem;">Phone Hotline</h4>
+        <p style="color:var(--text-muted); font-size:0.85rem;">+1 (800) 555-SOUND<br>Mon – Fri, 9am – 6pm PST</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

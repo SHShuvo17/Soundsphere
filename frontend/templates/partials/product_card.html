@@ -1,0 +1,69 @@
+{% load static %}
+<article class="product-card" id="product-card-{{ product.id }}">
+  <!-- IMAGE AREA -->
+  <div class="product-card-image-wrap">
+    <a href="{% url 'catalog:product_detail' product.slug %}" aria-label="{{ product.name }}">
+      {% if product.primary_image %}
+      <img src="{{ product.primary_image.url }}" alt="{{ product.primary_image.alt_text|default:product.name }}" class="product-card-img" loading="lazy" width="280" height="280">
+      {% else %}
+      <img src="{% static 'images/placeholder-speaker.svg' %}" alt="{{ product.name }}" class="product-card-img" loading="lazy" width="280" height="280">
+      {% endif %}
+    </a>
+
+    <!-- Badges -->
+    <div class="product-badge-group">
+      {% if product.discount_percentage > 0 %}
+      <span class="product-badge badge-discount">-{{ product.discount_percentage }}%</span>
+      {% elif product.is_best_seller %}
+      <span class="product-badge badge-bestseller">Best Seller</span>
+      {% elif product.is_new_arrival %}
+      <span class="product-badge badge-new">New</span>
+      {% endif %}
+    </div>
+
+    <!-- Wishlist Button -->
+    <button class="product-wishlist-btn wishlist-toggle-btn"
+            data-product-id="{{ product.id }}"
+            title="Save to Wishlist"
+            aria-label="Save {{ product.name }} to wishlist">
+      ♥
+    </button>
+  </div>
+
+  <!-- PRODUCT INFO -->
+  <div class="product-card-body">
+    {% if product.brand %}
+    <span class="product-card-brand">{{ product.brand.name }}</span>
+    {% endif %}
+
+    <h3 class="product-card-title">
+      <a href="{% url 'catalog:product_detail' product.slug %}">{{ product.name }}</a>
+    </h3>
+
+    <div class="product-card-rating">
+      <span class="stars">
+        {% for i in "12345" %}
+          {% if forloop.counter <= product.rating %}&#9733;{% else %}&#9734;{% endif %}
+        {% endfor %}
+      </span>
+      <span class="rating-count">({{ product.review_count|default:0 }})</span>
+    </div>
+
+    <!-- PRICE & ACTION -->
+    <div class="product-card-footer">
+      <div class="product-pricing">
+        <span class="price-current">${{ product.effective_price }}</span>
+        {% if product.discount_price %}
+        <span class="price-original">${{ product.price }}</span>
+        {% endif %}
+      </div>
+
+      <button class="btn btn-primary btn-sm add-to-cart-btn"
+              data-product-id="{{ product.id }}"
+              {% if product.stock_quantity == 0 %}disabled{% endif %}
+              aria-label="Add {{ product.name }} to cart">
+        {% if product.stock_quantity == 0 %}Sold Out{% else %}Add to Cart{% endif %}
+      </button>
+    </div>
+  </div>
+</article>

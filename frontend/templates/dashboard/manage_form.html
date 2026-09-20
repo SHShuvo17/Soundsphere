@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{{ label }} | SoundSphere{% endblock %}
+{% block content %}<main class="container" style="padding:2.5rem 0 5rem; max-width:960px;"><span class="section-badge">Store Administration</span><h1 class="section-title">{% if object %}Edit{% else %}Add{% endif %} {{ label|slice:":-1" }}</h1><form method="post" enctype="multipart/form-data" class="form-card" style="margin-top:1.5rem;">{% csrf_token %}{{ form.as_p }}<button class="btn btn-primary" type="submit">Save</button> <a class="btn btn-secondary" href="{% url 'dashboard:resource_list' resource %}">Cancel</a></form></main>{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ label }} | SoundSphere{% endblock %}
+{% block content %}
+<main class="container" style="padding:2.5rem 0 5rem;">
+  <div class="section-header"><div><span class="section-badge">Store Administration</span><h1 class="section-title">{{ label }}</h1></div><a class="btn btn-primary btn-sm" href="{% url 'dashboard:resource_create' resource %}">Add {{ label|slice:":-1" }}</a></div>
+  <form method="get" class="dashboard-filter-bar" style="display:flex; gap:.75rem; margin-bottom:1.5rem;"><input class="form-input" type="search" name="q" value="{{ search }}" placeholder="Search {{ label|lower }}" aria-label="Search {{ label|lower }}"><button class="btn btn-secondary" type="submit">Search</button></form>
+  <div style="overflow-x:auto; background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl);"><table style="width:100%; border-collapse:collapse; min-width:600px;"><thead><tr><th style="padding:1rem; text-align:left;">Record</th><th style="padding:1rem; text-align:left;">Status / details</th><th style="padding:1rem; text-align:left;">Action</th></tr></thead><tbody>
+    {% for object in objects %}<tr style="border-top:1px solid var(--border);"><td style="padding:1rem;"><strong>{{ object }}</strong></td><td style="padding:1rem;">{% if object.is_active != None %}{% if object.is_active %}Active{% else %}Inactive{% endif %}{% endif %}</td><td style="padding:1rem;"><a class="btn btn-secondary btn-sm" href="{% url 'dashboard:resource_edit' resource object.pk %}">Edit</a> <form method="post" action="{% url 'dashboard:resource_delete' resource object.pk %}" style="display:inline;">{% csrf_token %}<button class="btn btn-secondary btn-sm" type="submit">Delete</button></form></td></tr>{% empty %}<tr><td colspan="3" style="padding:3rem; text-align:center; color:var(--text-muted);">No records found.</td></tr>{% endfor %}
+  </tbody></table></div>
+</main>
+{% endblock %}

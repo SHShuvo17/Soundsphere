@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} — SoundSphere{% endblock %}
+{% block meta_description %}{{ product.short_description|default:product.name }}. Buy at SoundSphere with verified warranty and free delivery.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2rem; padding-bottom:4rem;">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="{% url 'catalog:shop' %}">Shop</a>
+    <span class="breadcrumb-separator">/</span>
+    {% if product.category %}
+    <a href="{% url 'catalog:category' product.category.slug %}">{{ product.category.name }}</a>
+    <span class="breadcrumb-separator">/</span>
+    {% endif %}
+    <span class="breadcrumb-current">{{ product.name|truncatechars:35 }}</span>
+  </nav>
+
+  <!-- PRODUCT DETAIL GRID (Section 25 & 27) -->
+  <div class="product-detail-layout">
+    <!-- LEFT: LARGE IMAGE & THUMBNAILS (Section 26) -->
+    <div class="detail-gallery">
+      <div class="detail-main-img-wrap" id="main-image-wrap">
+        {% if product.primary_image %}
+        <img src="{{ product.primary_image.url }}" alt="{{ product.name }}" id="main-product-img" class="detail-main-img">
+        {% else %}
+        <img src="{% static 'images/placeholder-speaker.svg' %}" alt="{{ product.name }}" id="main-product-img" class="detail-main-img">
+        {% endif %}
+      </div>
+
+      <!-- Thumbnail Gallery Switcher -->
+      {% if images|length > 1 %}
+      <div class="detail-thumbs">
+        {% for img in images %}
+        <img src="{{ img.url }}" alt="{{ product.name }}" class="detail-thumb {% if forloop.first %}active{% endif %}" onclick="changeMainImage(this.src, this)">
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: PRODUCT INFO & PURCHASE HIERARCHY (Section 27) -->
+    <div class="detail-info">
+      <!-- 1. Brand -->
+      {% if product.brand %}
+      <div class="detail-brand">{{ product.brand.name }}</div>
+      {% endif %}
+
+      <!-- 2. Product Name -->
+      <h1 class="detail-title">{{ product.name }}</h1>
+
+      <!-- 3. Rating & Review Count -->
+      <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem;">
+        <span class="stars" style="color:var(--warning); font-size:1.1rem;">
+          {% for i in "12345" %}
+            {% if forloop.counter <= product.rating %}&#9733;{% else %}&#9734;{% endif %}
+          {% endfor %}
+        </span>
+        <span style="font-size:0.9rem; font-weight:700; color:var(--text-primary);">{{ product.rating }}</span>
+        <span style="font-size:0.85rem; color:var(--text-muted);">({{ product.review_count|default:0 }} customer reviews)</span>
+      </div>
+
+      <!-- 4. Price & Discount -->
+      <div class="detail-pricing-box">
+        <span class="detail-current-price">${{ product.effective_price }}</span>
+        {% if product.discount_price %}
+        <span class="detail-original-price">${{ product.price }}</span>
+        <span class="product-badge badge-discount" style="font-size:0.82rem;">Save {{ product.discount_percentage }}%</span>
+        {% endif %}
+      </div>
+
+      <!-- 5. Stock Status -->
+      <div>
+        {% if product.stock_quantity > 0 %}
+        <span class="detail-stock-badge stock-in">✓ In Stock ({{ product.stock_quantity }} units available)</span>
+        {% else %}
+        <span class="detail-stock-badge stock-out">✕ Currently Out of Stock</span>
+        {% endif %}
+      </div>
+
+      <!-- Short Description -->
+      {% if product.short_description %}
+      <p style="color:var(--text-secondary); line-height:1.65; margin:1rem 0 1.5rem; font-size:0.95rem;">
+        {{ product.short_description }}
+      </p>
+      {% endif %}
+
+      <!-- 6. Quantity Selector & 7, 8, 9 CTAs -->
+      <div class="detail-purchase-actions">
+        {% if product.stock_quantity > 0 %}
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+          <!-- 6. Quantity Stepper -->
+          <div class="qty-stepper">
+            <button type="button" class="qty-btn" onclick="stepQty(-1)">-</button>
+            <input type="number" id="product-qty" value="1" min="1" max="{{ product.stock_quantity }}" class="qty-input" readonly>
+            <button type="button" class="qty-btn" onclick="stepQty(1)">+</button>
+          </div>
+
+          <!-- 7. ADD TO CART -->
+          <button class="btn btn-primary btn-lg add-to-cart-btn-lg" data-product-id="{{ product.id }}" id="detail-add-cart-btn">
+            Add to Cart
+          </button>
+
+          <!-- 8. BUY NOW -->
+          <button class="btn btn-secondary btn-lg" data-product-id="{{ product.id }}" id="btn-buy-now">
+            Buy Now
+          </button>
+
+          <!-- 9. ADD TO WISHLIST -->
+          <button class="btn btn-outline btn-lg wishlist-toggle-lg" data-product-id="{{ product.id }}" title="Save to Wishlist">
+            ♡ Add to Wishlist
+          </button>
+        </div>
+        {% else %}
+        <button class="btn btn-secondary btn-lg" disabled>Out of Stock</button>
+        {% endif %}
+      </div>
+
+      <!-- Trust Badges -->
+      <div style="border-top:1px solid var(--border); padding-top:1.25rem; display:grid; grid-template-columns:repeat(3, 1fr); gap:0.75rem; text-align:center;">
+        <div style="font-size:0.8rem; color:var(--text-muted);">
+          <div style="font-size:1.2rem; color:var(--accent); margin-bottom:0.2rem;">🛡️</div>
+          1-Year Warranty
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-muted);">
+          <div style="font-size:1.2rem; color:var(--accent); margin-bottom:0.2rem;">🚚</div>
+          Free Fast Delivery
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-muted);">
+          <div style="font-size:1.2rem; color:var(--accent); margin-bottom:0.2rem;">🔄</div>
+          30-Day Returns
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS: Description, Specifications, Reviews -->
+  <div style="margin-top:4rem;">
+    <div class="detail-tabs-nav">
+      <button class="detail-tab-btn active" onclick="switchDetailTab('desc', this)">Description</button>
+      <button class="detail-tab-btn" onclick="switchDetailTab('specs', this)">Specifications</button>
+      <button class="detail-tab-btn" onclick="switchDetailTab('reviews', this)">Customer Reviews ({{ reviews|length }})</button>
+    </div>
+
+    <!-- Tab 1: Description -->
+    <div id="tab-desc" class="tab-content" style="display:block;">
+      <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-lg); padding:2rem; line-height:1.7; color:var(--text-secondary);">
+        {{ product.description|linebreaks|default:"Detailed audio engineering and driver specifications crafted for pristine sonic reproduction." }}
+      </div>
+    </div>
+
+    <!-- Tab 2: Specifications Table -->
+    <div id="tab-specs" class="tab-content" style="display:none;">
+      <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden;">
+        <table style="width:100%; text-align:left; border-collapse:collapse;">
+          <tbody>
+            {% for spec in specifications %}
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:1rem 1.5rem; width:35%; font-weight:700; color:var(--text-primary); background:var(--background-secondary);">{{ spec.name }}</th>
+              <td style="padding:1rem 1.5rem; color:var(--text-secondary);">{{ spec.value }}</td>
+            </tr>
+            {% empty %}
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:1rem 1.5rem; width:35%; color:var(--text-primary); background:var(--background-secondary);">Frequency Response</th>
+              <td style="padding:1rem 1.5rem; color:var(--text-secondary);">20 Hz – 20,000 Hz</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:1rem 1.5rem; width:35%; color:var(--text-primary); background:var(--background-secondary);">Connectivity</th>
+              <td style="padding:1rem 1.5rem; color:var(--text-secondary);">Bluetooth 5.3, AUX 3.5mm, Optical, USB-C</td>
+            </tr>
+            <tr>
+              <th style="padding:1rem 1.5rem; width:35%; color:var(--text-primary); background:var(--background-secondary);">Power Output</th>
+              <td style="padding:1rem 1.5rem; color:var(--text-secondary);">120W Peak RMS</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 3: Reviews -->
+    <div id="tab-reviews" class="tab-content" style="display:none;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2.5rem;">
+        <!-- Existing Reviews List -->
+        <div>
+          <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1.5rem;">Verified Customer Ratings</h3>
+          <div style="display:flex; flex-direction:column; gap:1.25rem;">
+            {% for r in reviews %}
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <span class="stars" style="color:var(--warning);">
+                  {% for i in "12345" %}{% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}{% endfor %}
+                </span>
+                <span class="verified-badge">✓ Verified Buyer</span>
+              </div>
+              <p style="font-size:0.92rem; color:var(--text-secondary); margin-bottom:0.6rem;">{{ r.comment }}</p>
+              <div style="font-size:0.78rem; color:var(--text-muted);">By <strong>{{ r.user.get_full_name|default:r.user.username }}</strong> on {{ r.created_at|date:"M d, Y" }}</div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No reviews yet for this product. Be the first to share your listening experience!</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Submit Review Form -->
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:1.75rem;">
+          <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1rem;">Leave a Review</h3>
+          {% if user_can_review %}
+          <form id="review-form" onsubmit="submitReview(event, '{{ product.id }}')">
+            <div class="form-group">
+              <label class="form-label">Your Rating</label>
+              <select name="rating" id="review-rating" class="form-select" required>
+                <option value="5">★★★★★ (5/5) Outstanding</option>
+                <option value="4">★★★★☆ (4/5) Very Good</option>
+                <option value="3">★★★☆☆ (3/5) Average</option>
+                <option value="2">★★☆☆☆ (2/5) Disappointing</option>
+                <option value="1">★☆☆☆☆ (1/5) Poor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Review Details</label>
+              <textarea name="comment" id="review-comment" class="form-textarea" rows="4" placeholder="Tell us about the sound quality, bass response, and durability..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-full">Submit Verified Review</button>
+          </form>
+          {% elif request.user.is_authenticated %}
+          <p class="text-muted">You have already submitted a review for this product.</p>
+          {% else %}
+          <p class="text-muted">Please <a href="{% url 'accounts:login' %}?next={{ request.path }}" style="color:var(--accent); font-weight:700;">Sign In</a> to write a customer review.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATED PRODUCTS -->
+  {% if related_products %}
+  <div style="margin-top:5rem;">
+    <div class="section-header">
+      <div>
+        <span class="section-badge">You May Also Like</span>
+        <h2 class="section-title">Related Audio Systems</h2>
+      </div>
+    </div>
+    <div class="products-grid">
+      {% for rp in related_products %}
+        {% include "partials/product_card.html" with product=rp %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function changeMainImage(src, thumb) {
+  const mainImg = document.getElementById('main-product-img');
+  if (mainImg) mainImg.src = src;
+  document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
+  if (thumb) thumb.classList.add('active');
+}
+
+function stepQty(delta) {
+  const input = document.getElementById('product-qty');
+  if (!input) return;
+  const current = parseInt(input.value || '1', 10);
+  const max = parseInt(input.getAttribute('max') || '99', 10);
+  const next = Math.max(1, Math.min(max, current + delta));
+  input.value = next;
+}
+
+function switchDetailTab(tabName, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.detail-tab-btn').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('tab-' + tabName);
+  if (target) target.style.display = 'block';
+  if (btn) btn.classList.add('active');
+}
+
+async function submitReview(e, productId) {
+  e.preventDefault();
+  const rating = document.getElementById('review-rating').value;
+  const comment = document.getElementById('review-comment').value;
+
+  const res = await SoundSphere.fetchAPI('/api/reviews/submit/', {
+    method: 'POST',
+    body: JSON.stringify({ product_id: productId, rating: rating, comment: comment })
+  });
+
+  if (res.ok) {
+    SoundSphere.toast('Thank you! Your review was submitted successfully.', 'success');
+    setTimeout(() => window.location.reload(), 1500);
+  } else {
+    SoundSphere.toast(res.data.error || 'Could not submit review.', 'error');
+  }
+}
+</script>
+{% endblock %}

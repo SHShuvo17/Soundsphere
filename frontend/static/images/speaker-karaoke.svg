@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgKO" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e1065"/>
+      <stop offset="100%" stop-color="#0f051d"/>
+    </linearGradient>
+    <linearGradient id="neonPink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" rx="24" fill="url(#bgKO)"/>
+
+  <!-- Trolley / Party Karaoke Box -->
+  <rect x="180" y="140" width="240" height="340" rx="28" fill="#1e1138" stroke="url(#neonPink)" stroke-width="3"/>
+
+  <!-- Telescopic Handle -->
+  <path d="M250 140 L250 70 L350 70 L350 140" fill="none" stroke="#6b7280" stroke-width="6" stroke-linecap="round"/>
+  <rect x="230" y="60" width="140" height="16" rx="8" fill="#374151"/>
+
+  <!-- Equalizer Light Show Panel -->
+  <rect x="210" y="165" width="180" height="40" rx="8" fill="#0f051d" stroke="#a855f7" stroke-width="1.5"/>
+  <g fill="#f43f5e">
+    <rect x="225" y="175" width="8" height="20" rx="2"/>
+    <rect x="245" y="170" width="8" height="30" rx="2" fill="#00f2fe"/>
+    <rect x="265" y="180" width="8" height="15" rx="2"/>
+    <rect x="285" y="168" width="8" height="34" rx="2" fill="#00f2fe"/>
+    <rect x="305" y="172" width="8" height="26" rx="2"/>
+    <rect x="325" y="178" width="8" height="18" rx="2" fill="#00f2fe"/>
+    <rect x="345" y="168" width="8" height="34" rx="2"/>
+    <rect x="365" y="176" width="8" height="20" rx="2" fill="#00f2fe"/>
+  </g>
+
+  <!-- Big Woofer with RGB Ring -->
+  <circle cx="300" cy="340" r="85" fill="#0f051d" stroke="url(#neonPink)" stroke-width="4"/>
+  <circle cx="300" cy="340" r="55" fill="#1e1138" stroke="#00f2fe" stroke-width="2"/>
+  <circle cx="300" cy="340" r="22" fill="#f43f5e"/>
+
+  <!-- Dual Wireless Mics on sides -->
+  <g transform="translate(130, 200) rotate(-15)">
+    <rect x="0" y="40" width="16" height="100" rx="6" fill="#374151" stroke="#00f2fe" stroke-width="1.5"/>
+    <circle cx="8" cy="30" r="16" fill="#111827" stroke="#f43f5e" stroke-width="2"/>
+  </g>
+  <g transform="translate(450, 200) rotate(15)">
+    <rect x="0" y="40" width="16" height="100" rx="6" fill="#374151" stroke="#00f2fe" stroke-width="1.5"/>
+    <circle cx="8" cy="30" r="16" fill="#111827" stroke="#f43f5e" stroke-width="2"/>
+  </g>
+
+  <text x="300" y="530" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#f43f5e" text-anchor="middle" letter-spacing="4">PARTY &amp; WIRELESS KARAOKE</text>
+</svg>

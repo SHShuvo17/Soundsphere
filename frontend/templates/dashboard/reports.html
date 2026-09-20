@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Reports — SoundSphere{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:5rem;">
+  <div class="section-header" style="margin-bottom:2rem;">
+    <div>
+      <span class="section-badge">Store Administration</span>
+      <h1 class="section-title">Reports</h1>
+      <p class="section-subtitle">Export operational data for analysis and record keeping.</p>
+    </div>
+    <a href="{% url 'dashboard:index' %}" class="btn btn-secondary btn-sm">Dashboard</a>
+  </div>
+
+  <div style="max-width:720px; background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:2rem;">
+    <div style="display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.5rem;">
+      <div style="width:44px; height:44px; display:grid; place-items:center; border-radius:var(--radius-sm); background:var(--accent-light); color:var(--accent); font-size:1.3rem;">CSV</div>
+      <div>
+        <h2 style="font-size:1.25rem; margin-bottom:0.35rem;">Customer Data Report</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted);">{{ customer_count }} customer record{{ customer_count|pluralize }} ready to export.</p>
+      </div>
+    </div>
+    <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:1.25rem;">The export includes contact, account, order count, and spending data. Authentication credentials and password information are never included.</p>
+    <a href="{% url 'dashboard:users_csv' %}" class="btn btn-primary">Download Users CSV</a>
+  </div>
+</div>
+{% endblock %}

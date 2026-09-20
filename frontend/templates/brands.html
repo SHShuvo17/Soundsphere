@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Audio Brands — SoundSphere{% endblock %}
+{% block meta_description %}Discover authorized genuine audio manufacturers available on SoundSphere.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:4rem;">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-current">Brands</span>
+  </nav>
+
+  <div class="section-header text-center" style="justify-content:center; flex-direction:column; align-items:center; margin-bottom:3rem;">
+    <span class="section-badge">Authorized Retailer</span>
+    <h1 class="section-title">Shop by Audio Brand</h1>
+    <p class="section-subtitle">We partner directly with leading sound engineers and manufacturers</p>
+  </div>
+
+  <div class="brands-grid" style="grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:1.5rem;">
+    {% for brand in brands %}
+    <a href="{% url 'catalog:shop' %}?brand={{ brand.slug }}" class="category-card text-center" style="align-items:center;">
+      <h3 style="font-size:1.4rem; font-weight:900; color:var(--text-primary); margin-bottom:0.4rem;">{{ brand.name }}</h3>
+      <span style="font-size:0.85rem; color:var(--text-muted);">{{ brand.prod_count }} Products</span>
+      <span class="category-card-arrow" style="margin-top:0.75rem;">View Audio Collection →</span>
+    </a>
+    {% empty %}
+    <p class="text-center text-muted">No brands listed.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

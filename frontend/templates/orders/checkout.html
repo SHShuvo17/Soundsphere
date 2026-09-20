@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout — SoundSphere{% endblock %}
+{% block meta_description %}Complete your order with secure 256-bit encrypted checkout.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:5rem;">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="{% url 'cart:cart' %}">Cart</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-current">Secure Checkout</span>
+  </nav>
+
+  <div class="section-header" style="margin-bottom:2rem;">
+    <div>
+      <span class="section-badge">Fast & Secure</span>
+      <h1 class="section-title">Checkout</h1>
+    </div>
+  </div>
+
+  <form method="POST" action="{% url 'orders:checkout' %}" id="checkout-form">
+    {% csrf_token %}
+
+    <div class="checkout-layout">
+      <!-- LEFT: DELIVERY & PAYMENT INFORMATION (Section 30) -->
+      <div>
+        <!-- STEP 1: Delivery Address -->
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:2rem; margin-bottom:2rem;">
+          <h2 style="font-size:1.25rem; font-weight:800; margin-bottom:1.25rem; display:flex; align-items:center; gap:0.6rem;">
+            <span style="width:28px; height:28px; border-radius:50%; background:var(--accent); color:white; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">1</span>
+            Delivery Address
+          </h2>
+
+          {% if addresses %}
+          <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem;">
+            {% for addr in addresses %}
+            <label style="display:flex; align-items:flex-start; gap:0.75rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--background-secondary); cursor:pointer;">
+              <input type="radio" name="selected_address_id" value="{{ addr.id }}" {% if addr.is_default or forloop.first %}checked{% endif %} style="margin-top:0.25rem; accent-color:var(--accent);">
+              <div style="font-size:0.9rem;">
+                <strong>{{ addr.full_name }}</strong> &bull; {{ addr.phone }}<br>
+                <span style="color:var(--text-secondary);">{{ addr.address_line }}, {{ addr.city }}, {{ addr.district }} {{ addr.postal_code }}, {{ addr.country }}</span>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Address Form Fields if no address or guest -->
+          <div id="new-address-fields" {% if addresses %}style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1.5rem;"{% endif %}>
+            <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:1rem;">{% if addresses %}Or Deliver to a New Address{% else %}Shipping Details{% endif %}</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" class="form-input" placeholder="e.g. Alex Morgan" {% if not addresses %}required{% endif %}>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact Phone</label>
+                <input type="text" name="phone" class="form-input" placeholder="+1 (555) 000-0000" {% if not addresses %}required{% endif %}>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Street Address & Apt / Suite</label>
+              <input type="text" name="address_line" class="form-input" placeholder="123 Acoustic Blvd, Suite 400" {% if not addresses %}required{% endif %}>
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-input" placeholder="City" {% if not addresses %}required{% endif %}>
+              </div>
+              <div class="form-group">
+                <label class="form-label">State / Province</label>
+                <input type="text" name="district" class="form-input" placeholder="State" {% if not addresses %}required{% endif %}>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Postal / ZIP Code</label>
+                <input type="text" name="postal_code" class="form-input" placeholder="ZIP Code" {% if not addresses %}required{% endif %}>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Payment Method -->
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:2rem;">
+          <h2 style="font-size:1.25rem; font-weight:800; margin-bottom:1.25rem; display:flex; align-items:center; gap:0.6rem;">
+            <span style="width:28px; height:28px; border-radius:50%; background:var(--accent); color:white; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">2</span>
+            Payment Method
+          </h2>
+
+          <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--background-secondary); cursor:pointer;">
+              <input type="radio" name="payment_method" value="card" checked style="accent-color:var(--accent);">
+              <span style="font-size:0.92rem; font-weight:600;">Credit / Debit Card (Visa, Mastercard, Amex)</span>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--background-secondary); cursor:pointer;">
+              <input type="radio" name="payment_method" value="cod" style="accent-color:var(--accent);">
+              <span style="font-size:0.92rem; font-weight:600;">Cash on Delivery (Pay upon arrival)</span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top:1.5rem;">
+            <label class="form-label">Order Notes (Optional)</label>
+            <textarea name="order_notes" rows="2" class="form-textarea" placeholder="Special delivery instructions or gate code..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY (Section 30) -->
+      <aside class="order-summary-card">
+        <h2 class="summary-title">Order Items ({{ items|length }})</h2>
+
+        <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem; max-height:240px; overflow-y:auto;">
+          {% for item in items %}
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <img src="{{ item.product.primary_image.url }}" alt="{{ item.product.name }}" style="width:48px; height:48px; border-radius:var(--radius-sm); object-fit:contain; background:var(--card-image-bg);">
+            <div style="flex:1; min-width:0;">
+              <div style="font-size:0.85rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ item.product.name }}</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);">Qty: {{ item.quantity }} &bull; ${{ item.unit_price }}</div>
+            </div>
+            <div style="font-size:0.9rem; font-weight:700;">${{ item.total_price }}</div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${{ subtotal }}</span>
+        </div>
+
+        {% if discount > 0 %}
+        <div class="summary-row" style="color:var(--success);">
+          <span>Coupon Discount</span>
+          <span>-${{ discount }}</span>
+        </div>
+        {% endif %}
+
+        <div class="summary-row">
+          <span>Delivery</span>
+          <span>{% if shipping == 0 %}Free{% else %}${{ shipping }}{% endif %}</span>
+        </div>
+
+        <div class="summary-row total">
+          <span>Grand Total</span>
+          <span>${{ total }}</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-full" id="place-order-btn">
+          🔒 Place Order Now
+        </button>
+
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:0.75rem;">
+          By placing your order, you agree to SoundSphere's Terms & Conditions.
+        </p>
+      </aside>
+    </div>
+  </form>
+</div>
+{% endblock %}

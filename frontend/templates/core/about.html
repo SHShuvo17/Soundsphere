@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us — SoundSphere{% endblock %}
+{% block meta_description %}SoundSphere was founded with a singular purpose: connecting music and cinema enthusiasts with authentic, high-fidelity acoustic audio.{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:3.5rem; padding-bottom:5rem; max-width:900px;">
+  <!-- Header -->
+  <div class="text-center" style="margin-bottom:3.5rem;">
+    <span class="section-badge">Our Heritage</span>
+    <h1 style="font-size:clamp(2.2rem, 4vw, 3rem); font-weight:900; margin-bottom:0.75rem;">Acoustic Precision. Pure Sound.</h1>
+    <p style="color:var(--text-secondary); font-size:1.1rem; max-width:640px; margin:0 auto; line-height:1.6;">
+      We believe extraordinary audio should be accessible, beautifully engineered, and designed to move you.
+    </p>
+  </div>
+
+  <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); padding:3rem 2.5rem; margin-bottom:3rem; line-height:1.8; color:var(--text-secondary);">
+    <h2 style="font-size:1.5rem; font-weight:800; color:var(--text-primary); margin-bottom:1rem;">Crafting Acoustic Excellence</h2>
+    <p style="margin-bottom:1.5rem;">
+      Founded by audio engineers and sound designers, SoundSphere curates industry-leading audio systems from pioneering acoustic brands. From high-SPL party speakers and Dolby Atmos soundbars to clinical studio monitors, every piece of gear in our catalog undergoes meticulous acoustic verification.
+    </p>
+    <p>
+      Our mission is simple: <strong>Premium Sound. Simple Shopping.</strong> No convoluted specs, no counterfeit products—only verified performance backed by official manufacturer warranties and dedicated audio specialists.
+    </p>
+  </div>
+
+  <!-- Highlights -->
+  <div class="why-grid" style="grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));">
+    <div class="why-card">
+      <div class="why-icon">🎛️</div>
+      <h3 class="why-title">Acoustically Tested</h3>
+      <p class="why-desc">Every speaker model is tested in our listening lab for dynamic range and distortion.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon">🎧</div>
+      <h3 class="why-title">Audiophile Support</h3>
+      <p class="why-desc">Our dedicated advisory team helps you configure the optimal setup for your room.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon">🛡️</div>
+      <h3 class="why-title">100% Genuine</h3>
+      <p class="why-desc">Direct partnership with official global audio brands ensuring original quality.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

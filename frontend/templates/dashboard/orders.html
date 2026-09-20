@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Order Operations — SoundSphere{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem; padding-bottom:5rem;">
+  <div class="section-header" style="margin-bottom:1.5rem;">
+    <div>
+      <span class="section-badge">Store Administration</span>
+      <h1 class="section-title">Order Operations</h1>
+      <p class="section-subtitle">Search customers, review order totals, and keep fulfillment moving.</p>
+    </div>
+    <a href="{% url 'dashboard:index' %}" class="btn btn-secondary btn-sm">Dashboard</a>
+  </div>
+
+  <form method="get" class="dashboard-filter-bar" style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+    <label style="flex:1; min-width:220px;">
+      <span class="sr-only">Search orders</span>
+      <input class="form-input" type="search" name="q" value="{{ search }}" placeholder="Order number, email, or username">
+    </label>
+    <label style="min-width:200px;">
+      <span class="sr-only">Filter by status</span>
+      <select class="form-input" name="status">
+        <option value="">All statuses</option>
+        {% for value, label in order_statuses %}
+        <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label style="min-width:200px;">
+      <span class="sr-only">Filter by payment status</span>
+      <select class="form-input" name="payment_status">
+        <option value="">All payment statuses</option>
+        {% for value, label in payment_statuses %}
+        <option value="{{ value }}" {% if selected_payment_status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="btn btn-primary" type="submit">Filter orders</button>
+    {% if search or selected_status or selected_payment_status %}<a class="btn btn-secondary" href="{% url 'dashboard:orders' %}">Clear</a>{% endif %}
+  </form>
+
+  <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-xl); overflow:hidden;">
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.88rem; min-width:760px;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border); color:var(--text-muted); font-size:0.76rem; text-transform:uppercase;">
+            <th style="padding:0.9rem 1rem;">Order</th>
+            <th style="padding:0.9rem 1rem;">Customer</th>
+            <th style="padding:0.9rem 1rem;">Placed</th>
+            <th style="padding:0.9rem 1rem;">Total</th>
+            <th style="padding:0.9rem 1rem;">Update status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:1rem;">
+              <a href="{% url 'dashboard:order_detail' order.order_number %}"><strong>#{{ order.order_number }}</strong></a><br>
+              <span style="font-size:0.76rem; color:var(--text-muted);">{{ order.items.count }} item{{ order.items.count|pluralize }}</span>
+            </td>
+            <td style="padding:1rem;">
+              <strong>{{ order.user.get_full_name|default:order.user.username }}</strong><br>
+              <span style="font-size:0.76rem; color:var(--text-muted);">{{ order.user.email }}</span>
+            </td>
+            <td style="padding:1rem; color:var(--text-muted);">{{ order.created_at|naturaltime }}</td>
+            <td style="padding:1rem; font-weight:800;">${{ order.total_amount }}</td>
+            <td style="padding:1rem;">
+              <form method="post" action="{% url 'dashboard:order_status' order.order_number %}" style="display:flex; gap:0.5rem; align-items:center;">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <label>
+                  <span class="sr-only">Status for order {{ order.order_number }}</span>
+                  <select class="form-input" name="order_status" style="min-width:190px; padding:0.55rem 0.7rem;">
+                    {% for value, label in order_statuses %}
+                    <option value="{{ value }}" {% if order.order_status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Payment status for order {{ order.order_number }}</span>
+                  <select class="form-input" name="payment_status" style="min-width:150px; padding:0.55rem 0.7rem;">
+                    {% for value, label in payment_statuses %}
+                    <option value="{{ value }}" {% if order.payment_status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <button class="btn btn-secondary btn-sm" type="submit" aria-label="Save status for order {{ order.order_number }}">Save</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" style="padding:3rem; text-align:center; color:var(--text-muted);">No orders match this filter.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
