@@ -21,6 +21,7 @@ if str(apps_dir) not in sys.path:
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't', 'yes')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'soundsphere-development-key-default-secret-2026')
 
